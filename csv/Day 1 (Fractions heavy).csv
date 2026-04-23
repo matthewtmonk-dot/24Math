@@ -1,0 +1,26 @@
+Category,Value,Question,Answer
+Fractions,100,"What is 5/6 + 1/6?",1
+Fractions,200,"What is 3/4 - 2/3?",1/12
+Fractions,300,"What is 2 1/2 × 4/5?",2
+Fractions,400,"What is 3 3/4 ÷ 5/6?",9/2
+Fractions,500,"What is (2 2/3 ÷ 4/5) - 1/6?",19/6
+Multiplication and Division,100,"What is 6 x 7?",42
+Multiplication and Division,200,"What is 48 ÷ 6?",8
+Multiplication and Division,300,"What is 3.2 x 5?",16
+Multiplication and Division,400,"What is 144 ÷ 0.12?",1200
+Multiplication and Division,500,"A recipe uses 3/4 cup of sugar per batch. How much sugar is needed for 5 batches?",3 3/4 cups
+Order of Operations,100,"What is 6 + 3 x 2?",12
+Order of Operations,200,"What is (6 + 3) x 2?",18
+Order of Operations,300,"What is 20 - 4 x 3 + 2?",10
+Order of Operations,400,"What is 18 ÷ (3 + 3) x 4?",12
+Order of Operations,500,"What is 24 - [6 ÷ (1 + 2)] x 3?",18
+Area,100,"What is the area of a rectangle with length 5 and width 3?",15
+Area,200,"What is the area of a rectangle with length 8 and width 6?",48
+Area,300,"What is the area of a triangle with base 10 and height 4?",20
+Area,400,"A rectangle has area 36 and width 4. What is the length?",9
+Area,500,"A triangle has area 45 and base 9. What is the height?",10
+Data,100,"What is the mean of 2, 4, 6?",4
+Data,200,"What is the median of 3, 7, 9?",7
+Data,300,"What is the mode of 2, 3, 3, 4, 5?",3
+Data,400,"Find the mean of 5, 10, 15, 20",10
+Data,500,"The mean of 4 numbers is 10. What is their total?",40
