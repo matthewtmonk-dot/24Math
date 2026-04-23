@@ -3,6 +3,14 @@
   { "label": "6th Grade Review", "path": "./csv/6th-grade-review.csv" },
   { "label": "6th Grade Set 2", "path": "./csv/6th2.csv" },
 
+  { "label": "6th Grade Algebra Concepts", "path": "./csv/6thGrade_AlgebraConcepts_Jeopardy.csv" },
+  { "label": "6th Grade Area", "path": "./csv/6thGrade_Area.csv" },
+  { "label": "6th Grade Data", "path": "./csv/6thGrade_Data.csv" },
+  { "label": "6th Grade Decimals", "path": "./csv/6thGrade_Decimals.csv" },
+  { "label": "6th Grade Expressions & Order of Operations", "path": "./csv/6thGrade_Expressions_OrderOfOperations.csv" },
+  { "label": "6th Grade Percents", "path": "./csv/6thGrade_Percents_Jeopardy.csv" },
+  { "label": "6th Grade Volume", "path": "./csv/6thGrade_Volume_Jeopardy.csv" },
+
   { "label": "7th Grade Easy", "path": "./csv/7th-grade-easy.csv" },
   { "label": "7th Grade Review", "path": "./csv/7th-grade-review.csv" },
   { "label": "7th Grade Core", "path": "./csv/7th.csv" },
@@ -12,6 +20,7 @@
   { "label": "8th Grade Core", "path": "./csv/8th.csv" },
 
   { "label": "Day 1 – Fractions Heavy", "path": "./csv/Day 1 (Fractions heavy).csv" },
+  { "label": "Day 2 – Ratios & Rates", "path": "./csv/Day 2 6th Ratio&Rates.csv" },
 
   { "label": "Algebra Prep", "path": "./csv/algebra-prep.csv" },
   { "label": "Mixed Review Grades 6–8", "path": "./csv/mixed-reviewjeopardy-grades_6-8.csv" },
