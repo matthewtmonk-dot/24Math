@@ -1,0 +1,30 @@
+category,value,question,answer,image,answer_image
+Exponents + Pythagorean,100,Simplify: x^2 · x^3,x^5,,
+Exponents + Pythagorean,200,Simplify: (x^3)^2,x^6,,
+Exponents + Pythagorean,300,Simplify: x^6 / x^2,x^4,,
+Exponents + Pythagorean,400,A right triangle has legs 6 and 8. Find hypotenuse,10,,
+Exponents + Pythagorean,500,A right triangle has hypotenuse 13 and one leg 5. Find other leg,12,,
+
+Algebra / Equations,100,Solve: x + 4 = 12,x = 8,,
+Algebra / Equations,200,Solve: 2x = 18,x = 9,,
+Algebra / Equations,300,Solve: 3x - 5 = 10,x = 5,,
+Algebra / Equations,400,Solve: 2(x + 3) = 14,x = 4,,
+Algebra / Equations,500,Solve: 4(x - 2) + 3 = 3x + 11,x = 8,,
+
+Proportions / Functions / Relationships,100,If y = 3x find y when x = 4,y = 12,,
+Proportions / Functions / Relationships,200,Find slope between (1,1) and (3,5),m = 2,,
+Proportions / Functions / Relationships,300,Write equation with slope 2 and intercept 3,y = 2x + 3,,
+Proportions / Functions / Relationships,400,Find equation through (2,5) with slope 3,y = 3x - 1,,
+Proportions / Functions / Relationships,500,Compare: y = 2x + 5 and y = 3x. Which is larger for large x?,y = 3x,,
+
+Percent / Real-World Applications,100,What is 10% of 90?,9,,
+Percent / Real-World Applications,200,A $100 item is discounted 30%. Price?,70,,
+Percent / Real-World Applications,300,A value goes from 50 to 65. Percent increase?,30%,,
+Percent / Real-World Applications,400,A car travels 150 miles in 3 hours. Rate?,50 mph,,
+Percent / Real-World Applications,500,A value decreases from 120 to 90. Percent decrease?,25%,,
+
+Error Analysis / Word Problems,100,A student says x^2 · x^3 = x^6. What is correct?,x^5,,
+Error Analysis / Word Problems,200,A student says (x^2)^3 = x^5. What is correct?,x^6,,
+Error Analysis / Word Problems,300,A student solves triangle with legs 3 and 4 and gets 5 incorrectly as 7. What mistake?,Did not square before adding,,
+Error Analysis / Word Problems,400,A student solves x^6 / x^2 as x^12. What mistake?,Should subtract exponents,,
+Error Analysis / Word Problems,500,A ladder leans against wall forming right triangle. Base is 9 and ladder is 15. Height?,12,,

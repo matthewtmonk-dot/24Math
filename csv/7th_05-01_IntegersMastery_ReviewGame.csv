@@ -1,0 +1,30 @@
+category,value,question,answer,image,answer_image
+Integers,100,-6 + 14,8,,
+Integers,200,8 - (-5),13,,
+Integers,300,-3 × 7,-21,,
+Integers,400,3 + (-2)(5),-7,,
+Integers,500,−4(2 − 6) + 3,-4(−4)+3=16+3=19,,
+
+Equations,100,x + 5 = 12,x = 7,,
+Equations,200,3x = 18,x = 6,,
+Equations,300,2x + 4 = 12,x = 4,,
+Equations,400,3(x - 2) = 12,x = 6,,
+Equations,500,4x - 7 = 9,x = 4,,
+
+Proportions,100,What is 10 ÷ 2?,5,,
+Proportions,200,If 4 items cost $8 what is the unit rate?,2 per item,,
+Proportions,300,3/5 = x/20,x = 12,,
+Proportions,400,If 6/8 = x/24 what is x?,18,,
+Proportions,500,A car goes 150 miles in 3 hours what is the unit rate?,50 mph,,
+
+Percent,100,Convert 50% to a decimal,0.5,,
+Percent,200,Find 25% of 40,10,,
+Percent,300,Find 10% of 90,9,,
+Percent,400,A $50 item is 20% off what is the discount?,10,,
+Percent,500,A $60 item is discounted 50% what is the final price?,30,,
+
+Error Analysis,100,A student says −5 + 3 = 8 what is the mistake?,They ignored signs answer should be -2,,
+Error Analysis,200,A student says 8 - (-2) = 6 what is the mistake?,Subtracting a negative means add answer is 10,,
+Error Analysis,300,A student says −3 × −4 = −12 what is the mistake?,Negative times negative is positive answer is 12,,
+Error Analysis,400,A student says 3 + (-2)(5) = 5 what is the mistake?,They added before multiplying correct answer is -7,,
+Error Analysis,500,A student solves 4x - 7 = 9 and gets x = 2 what is the mistake?,They added wrong should be 16 then divide x=4,,

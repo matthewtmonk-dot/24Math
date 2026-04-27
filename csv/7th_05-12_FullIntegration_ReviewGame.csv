@@ -1,0 +1,36 @@
+category,value,question,answer,image,answer_image
+Integers,100,-9 + 4,-5,,
+Integers,200,7 - (-6),13,,
+Integers,300,-4 × -5,20,,
+Integers,400,6 + (-3)(4),-6,,
+Integers,500,-2(3 - 9) + 5,17,,
+
+Equations,100,x + 8 = 15,x = 7,,
+Equations,200,3x = 27,x = 9,,
+Equations,300,2x + 5 = 17,x = 6,,
+Equations,400,4(x - 2) = 16,x = 6,,
+Equations,500,5x - 7 = 3x + 9,x = 8,,
+
+Proportions,100,What is 15 ÷ 3?,5,,
+Proportions,200,If 4 items cost $12 what is the unit rate?,3 per item,,
+Proportions,300,4/5 = x/25,x = 20,,
+Proportions,400,If 6/7 = x/35 what is x?,30,,
+Proportions,500,A car travels 240 miles in 4 hours what is the unit rate?,60 mph,,
+
+Percent,100,Convert 60% to a decimal,0.6,,
+Percent,200,Find 20% of 70,14,,
+Percent,300,Find 15% of 200,30,,
+Percent,400,A $80 item is 25% off what is the discount?,20,,
+Percent,500,A $120 item is discounted 25% what is the final price?,90,,
+
+Word Problems,100,If 3 notebooks cost $6 how much do 5 cost?,10,,
+Word Problems,200,A car travels 100 miles in 2 hours how far in 6 hours?,300 miles,,
+Word Problems,300,If 5 shirts cost $45 how much do 8 shirts cost?,72,,
+Word Problems,400,A recipe uses 4 cups of flour for 16 cookies how many cups for 24 cookies?,6 cups,,
+Word Problems,500,A runner goes 8 miles in 64 minutes how far in 2 hours?,15 miles,,
+
+Error Analysis,100,A student says −8 + 3 = 11 what is wrong?,They ignored signs correct is -5,,
+Error Analysis,200,A student solves x + 5 = 12 and gets x = 17 what is wrong?,They added instead of subtracting,,
+Error Analysis,300,A student solves 2x + 4 = 12 and gets x = 8 what is wrong?,They did not subtract 4 first,,
+Error Analysis,400,A student solves 3(x - 2) = 12 and gets x = 2 what is wrong?,They did not distribute correctly correct answer is 6,,
+Error Analysis,500,A student solves 5x - 7 = 3x + 9 and gets x = 1 what is wrong?,They moved terms incorrectly correct answer is 8,,
