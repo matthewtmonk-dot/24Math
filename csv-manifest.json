@@ -1,30 +1,11 @@
 [
-  { "label": "6th Grade Easy", "path": "./csv/6th-grade-easy.csv" },
-  { "label": "6th Grade Review", "path": "./csv/6th-grade-review.csv" },
-  { "label": "6th Grade Set 2", "path": "./csv/6th2.csv" },
+  { "label": "6th – 04/28 Basic Algebra Review", "path": "./csv/6th_04-28_BasicAlgebra_ReviewGame.csv" },
+  { "label": "6th – 04/30 Data Review", "path": "./csv/6th_04-30_Data_ReviewGame.csv" },
+  { "label": "6th – 05/01 Decimals Review", "path": "./csv/6th_05-01_Decimals_ReviewGame.csv" },
+  { "label": "6th – 05/05 Expressions & Order of Operations", "path": "./csv/6th_05-05_Expressions_OrderOps_ReviewGame.csv" },
+  { "label": "6th – 05/07 Geometry Area", "path": "./csv/6th_05-07_GeometryArea_ReviewGame.csv" },
+  { "label": "6th – 05/08 Geometry Volume", "path": "./csv/6th_05-08_GeometryVolume_ReviewGame.csv" },
+  { "label": "6th – 05/12 Percent Review", "path": "./csv/6th_05-12_Percent_ReviewGame.csv" },
 
-  { "label": "6th Grade Algebra Concepts", "path": "./csv/6thGrade_AlgebraConcepts_Jeopardy.csv" },
-  { "label": "6th Grade Area", "path": "./csv/6thGrade_Area.csv" },
-  { "label": "6th Grade Data", "path": "./csv/6thGrade_Data.csv" },
-  { "label": "6th Grade Decimals", "path": "./csv/6thGrade_Decimals.csv" },
-  { "label": "6th Grade Expressions & Order of Operations", "path": "./csv/6thGrade_Expressions_OrderOfOperations.csv" },
-  { "label": "6th Grade Percents", "path": "./csv/6thGrade_Percents_Jeopardy.csv" },
-  { "label": "6th Grade Volume", "path": "./csv/6thGrade_Volume_Jeopardy.csv" },
-
-  { "label": "7th Grade Easy", "path": "./csv/7th-grade-easy.csv" },
-  { "label": "7th Grade Review", "path": "./csv/7th-grade-review.csv" },
-  { "label": "7th Grade Core", "path": "./csv/7th.csv" },
-
-  { "label": "8th Grade Easy", "path": "./csv/8th-grade-easy.csv" },
-  { "label": "8th Grade Review", "path": "./csv/8th-grade-review.csv" },
-  { "label": "8th Grade Core", "path": "./csv/8th.csv" },
-
-  { "label": "Day 1 – Fractions Heavy", "path": "./csv/Day 1 (Fractions heavy).csv" },
-  { "label": "Day 2 – Ratios & Rates", "path": "./csv/Day 2 6th Ratio&Rates.csv" },
-
-  { "label": "Algebra Prep", "path": "./csv/algebra-prep.csv" },
-  { "label": "Mixed Review Grades 6–8", "path": "./csv/mixed-reviewjeopardy-grades_6-8.csv" },
-
-  { "label": "Test Bank", "path": "./csv/test-bank.csv" },
   { "label": "Template", "path": "./csv/Template.csv" }
 ]
