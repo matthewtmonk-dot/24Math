@@ -3,96 +3,216 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jeopardy Game</title>
-  <link rel="stylesheet" href="css/styles.css">
- 
+  <title>Make 24</title>
+  <link rel="stylesheet" href="css/make24.css">
 </head>
-
 <body>
-<div id="app">
+<div id="app" class="make24App" data-settings-open="false">
+  <section class="startScreen" id="startScreen" aria-labelledby="startTitle">
+    <div class="startPanel">
+      <h1 id="startTitle">Make <span>24</span></h1>
+      <p class="startSubtitle">Build an expression that equals 24.</p>
+      <ul class="rulesList">
+        <li><span class="ruleIcon">1</span><span>Use <strong>all four numbers</strong> <strong>exactly once</strong>.</span></li>
+        <li><span class="ruleIcon">2</span><span>You may use <strong>+, &minus;, &times;, &divide;</strong>, and parentheses.</span></li>
+        <li><span class="ruleIcon">3</span><span>Try to make exactly <strong>24</strong>.</span></li>
+      </ul>
+      <div class="startExample" aria-label="Worked example">
+        <div class="exampleLabel">Example</div>
+        <div class="exampleTiles" aria-label="Example numbers">
+          <span class="numberTile">2</span>
+          <span class="numberTile">3</span>
+          <span class="numberTile">4</span>
+          <span class="numberTile">6</span>
+        </div>
+        <div class="exampleExpression" aria-label="Example solution">
+          <span class="op">(</span><span class="num n4">6</span>
+          <span class="op">+</span>
+          <span class="num n3">4</span>
+          <span class="op">&minus;</span>
+          <span class="num n1">2</span><span class="op">)</span>
+          <span class="op">&times;</span>
+          <span class="num n2">3</span>
+          <span class="equals">= 24</span>
+        </div>
+      </div>
+      <button class="btn startBtn" id="startGameBtn" type="button">Start Game</button>
+    </div>
+  </section>
+
   <header>
     <div class="titleWrap">
-      <h1 id="gameTitle">Jeopardy Review</h1>
+      <h1 id="gameTitle">Make 24</h1>
+      <div class="subtitle">Use all four numbers exactly once to make 24.</div>
     </div>
 
     <div class="topBarControls" aria-label="Primary game controls">
-      <button class="btn ghost settingsToggleBtn" id="settingsToggleBtn" type="button" aria-controls="headerControls" aria-expanded="false">
-        ⚙ Settings
-      </button>
-      <div class="pill compactBankPill" id="bankIndicator" title="Which question bank is active">Bank: Default</div>
+      <button class="btn ghost settingsToggleBtn" id="settingsToggleBtn" type="button" aria-controls="headerControls" aria-expanded="false">Settings</button>
+      <div class="pill compactStatusPill" id="laneIndicator">3 Team Lanes</div>
+      <div class="musicControls" aria-label="Music controls">
+        <span class="musicLabel">Music</span>
+        <select id="backgroundMusic" aria-label="Background music">
+          <option value="off" selected>Off</option>
+          <option value="on">On</option>
+        </select>
+        <input id="musicVolume" type="range" min="0" max="100" value="30" aria-label="Music volume" />
+        <span id="musicVolumeValue">30</span>
+      </div>
       <button class="btn ghost" id="fullscreenBtn" type="button">Fullscreen</button>
-      <button class="btn ghost" id="resetScoresBtn" title="Reset team scores (keeps used clues)">Reset Scores</button>
-      <button class="btn ghost" id="resetGameBtn" title="Reset everything (scores + used clues)">Reset Game</button>
+      <button class="btn ghost" id="resetScoresBtn" type="button">Reset Scores</button>
+      <button class="btn ghost" id="resetGameBtn" type="button">Reset Game</button>
     </div>
 
-    <div class="topControls" id="headerControls" aria-label="Game setup controls">
+    <div class="topControls" id="headerControls" aria-label="Game settings">
       <div class="drawerHead">
         <strong>Settings</strong>
-        <button class="btn ghost" id="settingsCloseBtn" type="button" aria-label="Close settings">✕</button>
+        <button class="btn ghost" id="settingsCloseBtn" type="button" aria-label="Close settings">Close</button>
       </div>
-      <div class="settingsPanelIntro">
-        Game setup controls live here so the board stays front and center during play.
+      <div class="settingsPanelIntro">Adjust teams, difficulty, timer, and active team options.</div>
+
+      <div class="settingsSection">
+        <div class="settingsSectionTitle">Game Setup</div>
+        <div class="settingsGrid">
+          <div class="pill">
+            <label for="teamCount">Teams</label>
+            <select id="teamCount">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+            </select>
+          </div>
+          <div class="pill">
+            <label for="defaultTime">Timer Length</label>
+            <input id="defaultTime" type="number" min="10" max="600" step="5" value="120" aria-label="Timer length in seconds" />
+          </div>
+          <div class="pill">
+            <label for="difficultyMode">Puzzle Difficulty</label>
+            <select id="difficultyMode">
+              <option value="starter">Starter</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+              <option value="mixed" selected>Random Mixed</option>
+              <option value="progressive">Progressive</option>
+              <option value="per-team">Per-Team Difficulty</option>
+            </select>
+          </div>
+          <div class="pill">
+            <label for="showDifficultyLabels">Show Difficulty Labels</label>
+            <select id="showDifficultyLabels">
+              <option value="off" selected>Off</option>
+              <option value="on">On</option>
+            </select>
+          </div>
+          <div class="pill">
+            <label for="incorrectMode">Incorrect Button</label>
+            <select id="incorrectMode">
+              <option value="off">Off</option>
+              <option value="no-penalty" selected>On, no penalty</option>
+              <option value="penalty">On, -3 points</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div class="settingsGrid">
-        <div class="pill">
-          <label for="teamCount">Teams</label>
-          <select id="teamCount">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3" selected>3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-          </select>
-        </div>
-        <div class="pill">
-          <label for="defaultTime">Default Time</label>
-          <input id="defaultTime" type="number" min="5" max="600" step="5" value="20" aria-label="Default clue timer seconds" />
-        </div>
-        <div class="pill builtInPickerPill">
-          <label for="builtInBankSelect">Choose a built-in game</label>
-          <select id="builtInBankSelect" aria-label="Choose a built-in game board">
-            <option value="">Default built-in board</option>
-          </select>
+      <div class="settingsSection">
+        <div class="settingsSectionTitle">Teams</div>
+        <div class="teamSettings" id="teamSettings" aria-label="Team names and colors"></div>
+      </div>
+
+      <div class="settingsSection soundSection" aria-label="Sound settings">
+        <button class="soundSettingsToggle" id="soundSettingsToggle" type="button" aria-expanded="false" aria-controls="soundSettingsBody">
+          <span>Sound Effects Settings</span>
+          <span class="soundSettingsChevron" aria-hidden="true">&rsaquo;</span>
+        </button>
+        <div class="settingsGrid soundSettingsBody" id="soundSettingsBody" hidden>
+          <div class="pill">
+            <label for="soundEffects">Sound Effects</label>
+            <select id="soundEffects">
+              <option value="on" selected>On</option>
+              <option value="off">Off</option>
+            </select>
+          </div>
+          <div class="pill">
+            <label for="randomSound">Random Selector Sound</label>
+            <select id="randomSound">
+              <option value="on" selected>On</option>
+              <option value="off">Off</option>
+            </select>
+          </div>
+          <div class="pill">
+            <label for="rewardSounds">Correct / Bonus Sounds</label>
+            <select id="rewardSounds">
+              <option value="on" selected>On</option>
+              <option value="off">Off</option>
+            </select>
+          </div>
+          <div class="pill">
+            <label for="timerSounds">Timer Sounds</label>
+            <select id="timerSounds">
+              <option value="off">Off</option>
+              <option value="warning" selected>Warning Only</option>
+              <option value="countdown">Full Countdown</option>
+            </select>
+          </div>
+          <div class="pill rangePill">
+            <label for="effectsVolume">Effects Volume</label>
+            <input id="effectsVolume" type="range" min="0" max="100" value="70" />
+            <span id="effectsVolumeValue">70</span>
+          </div>
         </div>
       </div>
 
       <div class="settingsActions">
-        <button class="btn" id="loadBuiltInBankBtn" type="button">Load Built-in</button>
-        <button class="btn" id="loadBankBtn" type="button">Upload CSV From Device</button>
-        <button class="btn ghost" id="clearBankBtn" type="button" title="Remove saved CSV and go back to the built-in bank">Clear Loaded Bank</button>
-        <button class="btn ghost" id="downloadTemplateBtn" type="button">Download CSV Template</button>
-        <button class="btn ghost" id="viewUploadInstructionsBtn" type="button">View Upload Instructions</button>
+        <button class="btn" id="newPuzzlesBtn" type="button">Reset Round</button>
+        <button class="btn ghost" id="settingsResetScoresBtn" type="button">Reset Scores</button>
+        <button class="btn ghost" id="settingsResetGameBtn" type="button">Reset Game</button>
+        <button class="btn ghost" id="backToInstructionsBtn" type="button">Back to Instructions</button>
+        <button class="btn ghost" id="settingsFullscreenBtn" type="button">Fullscreen</button>
       </div>
-      <input id="bankFileInput" type="file" accept=".csv" hidden />
     </div>
   </header>
 
   <main>
-    <section class="board" aria-label="Jeopardy Board">
-      <div class="boardHeader" id="boardHeader"></div>
-      <div class="grid" id="boardGrid"></div>
+    <section class="puzzleArea" aria-label="24 Game puzzle lanes">
+      <div class="timerPanel" aria-label="Class timer">
+        <div>
+          <div class="timerLabel">Timer</div>
+          <div class="timerDisplay" id="timerDisplay">2:00</div>
+        </div>
+        <div class="timerControls">
+          <button class="btn mini" id="timerStartPauseBtn" type="button">Start</button>
+          <button class="btn ghost mini" id="timerResetBtn" type="button">Reset</button>
+          <button class="btn ghost mini" id="timerMinusBtn" type="button">-10</button>
+          <button class="btn ghost mini" id="timerPlusBtn" type="button">+10</button>
+        </div>
+      </div>
+
+      <div class="teacherBar" aria-label="Teacher controls">
+        <button class="btn" id="startRoundBtn" type="button">Start Round</button>
+        <button class="btn ghost" id="endRoundBtn" type="button">Stop Timer</button>
+        <button class="btn" id="nextRoundBtn" type="button">Next Round</button>
+        <button class="btn ghost" id="revealAllBtn" type="button">Reveal All Solutions</button>
+        <button class="btn ghost" id="resetRoundBtn" type="button">Reset Round</button>
+      </div>
+
+      <div class="puzzleLanes" id="puzzleLanes" aria-live="polite"></div>
     </section>
 
     <aside class="scorePanel" id="scorePanel" aria-label="Scoreboard">
       <div class="scoreHeader" id="scoreHeaderBar">
         <div class="scoreHeaderMain">
-          <h2>Scoreboard</h2>
-          <div class="hint">Select a team, then score</div>
+          <h2>Scores</h2>
+          <div class="hint">Correct answers are worth 3 points</div>
         </div>
         <div class="scoreHeaderActions">
-          <button class="btn mini" id="randomTeamBtn" type="button" title="Pick a random active team">Random Team</button>
+          <button class="btn mini" id="randomTeamBtn" type="button">Random Team</button>
           <button class="btn ghost mini scoreToggleBtn" id="scoreToggleBtn" type="button" aria-expanded="true" aria-controls="scoreBody">▲</button>
         </div>
       </div>
-
       <div class="scoreBody" id="scoreBody"></div>
-
       <div class="foot">
-        <div>
-          Shortcuts: <span class="kbd">Esc</span> board • <span class="kbd">Space</span> answer
-        </div>
+        <div>Manual score: +1 / -1</div>
         <div id="statusText">Ready</div>
       </div>
     </aside>
@@ -101,108 +221,6 @@
 
 <div class="settingsBackdrop" id="settingsBackdrop" hidden></div>
 
-<div class="overlay infoOverlay" id="instructionsOverlay" role="dialog" aria-modal="true" aria-labelledby="instructionsTitle">
-  <div class="modal infoModal">
-    <div class="modalTop">
-      <div class="meta">
-        <div class="line1" id="instructionsTitle">CSV Upload Instructions</div>
-        <div class="line2">Teacher-friendly steps for formatting and importing a game board.</div>
-      </div>
-      <button class="btn ghost" id="instructionsCloseBtn" type="button">Close</button>
-    </div>
-    <div class="modalBody infoModalBody">
-      <div class="infoCard">
-        <p>Use a CSV file with exactly these columns: <strong>category</strong>, <strong>value</strong>, <strong>question</strong>, <strong>answer</strong>.</p>
-        <ul class="infoList">
-          <li>Each row is one clue on the board.</li>
-          <li>Use values like 100, 200, 300, 400, and 500 for a standard Jeopardy board.</li>
-          <li>Keep category names consistent so clues group correctly.</li>
-          <li>If a question or answer contains commas, let your spreadsheet app wrap the cell correctly when saving as CSV.</li>
-          <li>Save the file as CSV before uploading.</li>
-          <li>Then use the existing Upload CSV From Device button in Settings to import it into the game.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Clue">
-  <div class="modal">
-    <div class="modalTop">
-      <div class="meta">
-        <div class="line1" id="modalTitle">Category • $Value</div>
-        <div class="line2" id="modalMeta">Pick a team, then Correct/Incorrect</div>
-      </div>
-      <!-- MUSIC BAR (now centered in the top header row) -->
-  <div class="clue-musicbar clue-musicbar--header">
-    <button id="clueMusicToggle" type="button" aria-pressed="true">
-      Music: On
-    </button>
-
-    <label class="clue-musicvol">
-      Vol
-      <input id="clueMusicVol" type="range" min="0" max="1" step="0.01" value="0.35">
-    </label>
-  </div>
-      <button class="btn ghost" id="closeBtn">Back to Board (Esc)</button>
-    </div>
-
-    <div class="modalBody">
-      <div class="qBox">
-        <p class="qText" id="questionText">Question goes here</p>
-        <div class="imgWrap" id="imgWrap" style="display:none;"></div>
-
-        <div class="answer" id="answerBox">
-          <p class="answerTitle">Answer</p>
-          <p class="aText" id="answerText">Answer goes here</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="modalActions">
-      <div class="leftActions">
-        <button class="btn primary" id="toggleAnswerBtn">Show Answer (Space)</button>
-        <button class="btn ghost" id="markUsedBtn">Mark Used</button>
-      </div>
-      <div class="midActions" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center;">
-  <div class="pill" title="Question timer">
-    <label for="modalTimerStartStopBtn">Timer</label>
-    <button class="btn mini" id="modalTimerMinusBtn" type="button">-10</button>
-    <button class="btn mini" id="modalTimerStartStopBtn" type="button">START</button>
-    <button class="btn mini" id="modalTimerPlusBtn" type="button">+10</button>
-
-    <span id="modalTimerDisplay" style="min-width:84px; text-align:center; font-weight:950;">
-      0:00
-    </span>
-  </div>
-</div>
-      <div class="rightActions">
-        <button class="btn good" id="correctBtn">Correct (+$)</button>
-        <button class="btn bad" id="incorrectBtn">Incorrect (-$)</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MathJax configuration -->
-<script>
-  window.MathJax = {
-    tex: { inlineMath: [['\\(','\\)'], ['$', '$']] }
-  };
-</script>
-
-<!-- MathJax library -->
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
-<!-- Your math helper -->
-<script src="js/math-render.js" defer></script>
-
-<!-- Your main game -->
-<script src="js/app.js" defer></script>
-<!-- Background Jeopardy music (loop) -->
-<audio id="jeopardyLoop" preload="auto" loop>
-  <source src="assets/audio/jeopardyLoop.mp3" type="audio/mpeg">
-</audio>
+<script src="js/make24.js" defer></script>
 </body>
 </html>
