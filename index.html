@@ -86,6 +86,10 @@
             <input id="defaultTime" type="number" min="10" max="600" step="5" value="120" aria-label="Timer length in seconds" />
           </div>
           <div class="pill">
+            <label for="roundLimit">Rounds to Win</label>
+            <input id="roundLimit" type="number" min="4" max="20" step="1" value="6" aria-label="Rounds before victory" />
+          </div>
+          <div class="pill">
             <label for="difficultyMode">Puzzle Difficulty</label>
             <select id="difficultyMode">
               <option value="starter">Starter</option>
@@ -220,6 +224,20 @@
 </div>
 
 <div class="settingsBackdrop" id="settingsBackdrop" hidden></div>
+
+<div class="victoryOverlay" id="victoryOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="victoryTitle">
+  <div class="victoryCard">
+    <div class="victoryKicker" id="victoryKicker">Victory</div>
+    <h2 id="victoryTitle">Team Won</h2>
+    <div class="victoryWinnerList" id="victoryWinnerList"></div>
+    <p id="victoryMessage">They won in victory!</p>
+    <div class="victoryScores" id="victoryScores"></div>
+    <div class="victoryActions">
+      <button class="btn" id="victoryNewGameBtn" type="button">New Game</button>
+      <button class="btn ghost" id="victoryCloseBtn" type="button">Keep Scores</button>
+    </div>
+  </div>
+</div>
 
 <script src="js/make24.js" defer></script>
 </body>

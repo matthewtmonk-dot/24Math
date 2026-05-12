@@ -522,6 +522,132 @@ h1{
   z-index:40;
 }
 
+.victoryOverlay{
+  position:fixed;
+  inset:0;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:rgba(11,16,32,.48);
+}
+
+.victoryOverlay[hidden]{
+  display:none;
+}
+
+.victoryCard{
+  width:min(620px, 100%);
+  max-height:calc(100dvh - 44px);
+  overflow:auto;
+  border:2px solid rgba(255,255,255,.95);
+  border-radius:28px;
+  padding:28px;
+  background:
+    linear-gradient(90deg, #ff4fb9 0 25%, #ff9f2e 25% 50%, #47e08a 50% 75%, #56b7ff 75% 100%) top / 100% 10px no-repeat,
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(246,247,255,.96));
+  box-shadow:0 30px 80px rgba(11,16,32,.34);
+  text-align:center;
+}
+
+.victoryKicker{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:1000;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  margin-top:8px;
+}
+
+.victoryCard h2{
+  margin:6px 0 14px;
+  color:#10182c;
+  font-size:clamp(38px, 8vw, 62px);
+  line-height:1;
+  font-weight:1100;
+}
+
+.victoryWinnerList{
+  display:grid;
+  gap:10px;
+  margin:0 auto 14px;
+}
+
+.victoryWinner{
+  --winner-color:var(--btn);
+  display:grid;
+  grid-template-columns:auto minmax(0, 1fr) auto;
+  align-items:center;
+  gap:10px;
+  border:3px solid var(--winner-color);
+  border-radius:18px;
+  padding:11px 14px;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--winner-color) 14%, white), #fff 62%);
+  color:#10182c;
+  font-size:20px;
+  font-weight:1100;
+  text-align:left;
+}
+
+.victorySwatch{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  background:var(--winner-color);
+  box-shadow:0 8px 16px color-mix(in srgb, var(--winner-color) 34%, transparent);
+}
+
+.victoryColorText{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:1000;
+}
+
+.victoryCard p{
+  margin:0 0 16px;
+  color:var(--muted);
+  font-size:18px;
+  font-weight:900;
+}
+
+.victoryScores{
+  display:grid;
+  gap:8px;
+  margin:0 0 18px;
+}
+
+.victoryScore{
+  --winner-color:var(--btn);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  color:var(--ink);
+  font-weight:900;
+}
+
+.victoryScore.is-winner{
+  border-color:var(--winner-color);
+  background:color-mix(in srgb, var(--winner-color) 10%, white);
+}
+
+.victoryScore strong{
+  font-size:24px;
+  font-weight:1100;
+  font-variant-numeric:tabular-nums;
+}
+
+.victoryActions{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+
 .teamSettings{
   display:grid;
   gap:10px;
@@ -1106,7 +1232,8 @@ main{
 
   .settingsGrid,
   .settingsActions,
-  .puzzleActions{
+  .puzzleActions,
+  .victoryActions{
     grid-template-columns:1fr;
   }
 
@@ -1237,5 +1364,18 @@ main{
   .exampleExpression .equals{
     padding:5px 10px;
     border-radius:11px;
+  }
+
+  .victoryCard{
+    padding:24px 18px;
+    border-radius:24px;
+  }
+
+  .victoryWinner{
+    grid-template-columns:auto minmax(0, 1fr);
+  }
+
+  .victoryColorText{
+    grid-column:2;
   }
 }

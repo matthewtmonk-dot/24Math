@@ -51,6 +51,9 @@ const PUZZLES = [
 
 const STORAGE_KEY = "make24_game_v3";
 const MAX_TEAMS = 3;
+const DEFAULT_ROUND_LIMIT = 6;
+const MIN_ROUND_LIMIT = 4;
+const MAX_ROUND_LIMIT = 20;
 const CORRECT_POINTS = 3;
 const FIRST_SOLVE_BONUS = 1;
 const TEAM_COLORS = ["#ff4fb9", "#ff9f2e", "#56b7ff"];
@@ -75,6 +78,7 @@ const els = {
   settingsBackdrop:document.getElementById("settingsBackdrop"),
   teamCount:document.getElementById("teamCount"),
   defaultTime:document.getElementById("defaultTime"),
+  roundLimit:document.getElementById("roundLimit"),
   difficultyMode:document.getElementById("difficultyMode"),
   showDifficultyLabels:document.getElementById("showDifficultyLabels"),
   incorrectMode:document.getElementById("incorrectMode"),
@@ -115,7 +119,15 @@ const els = {
   scoreHeaderBar:document.getElementById("scoreHeaderBar"),
   scoreToggleBtn:document.getElementById("scoreToggleBtn"),
   randomTeamBtn:document.getElementById("randomTeamBtn"),
-  statusText:document.getElementById("statusText")
+  statusText:document.getElementById("statusText"),
+  victoryOverlay:document.getElementById("victoryOverlay"),
+  victoryKicker:document.getElementById("victoryKicker"),
+  victoryTitle:document.getElementById("victoryTitle"),
+  victoryWinnerList:document.getElementById("victoryWinnerList"),
+  victoryMessage:document.getElementById("victoryMessage"),
+  victoryScores:document.getElementById("victoryScores"),
+  victoryNewGameBtn:document.getElementById("victoryNewGameBtn"),
+  victoryCloseBtn:document.getElementById("victoryCloseBtn")
 };
 
 let timerId = null;
@@ -125,19 +137,22 @@ let audioContext = null;
 let audioUnlocked = false;
 let lastRoundEndSoundKey = "";
 let soundSettingsExpanded = false;
+let victoryDismissed = false;
 const timerBeepsPlayed = new Set();
 const AUDIO_FILES = {
   background: "assets/sounds/background-loop.mp3",
   correct: "assets/sounds/correct.mp3",
   bonus: "assets/sounds/bonus.mp3",
   firstSolve: "assets/sounds/first-solve.mp3",
-  round: "assets/sounds/round.mp3"
+  round: "assets/sounds/round.mp3",
+  victory: "assets/sounds/cute_happy_victory.mp3"
 };
 const fileSounds = {
   correct:null,
   bonus:null,
   firstSolve:null,
   round:null,
+  victory:null,
   background:null
 };
 
@@ -174,6 +189,7 @@ function defaultState(){
     teamCount:3,
     selectedTeam:0,
     defaultSeconds:120,
+    roundLimit:DEFAULT_ROUND_LIMIT,
     remainingSeconds:120,
     difficultyMode:"mixed",
     progressiveSettingsDirty:false,
@@ -191,6 +207,7 @@ function defaultState(){
     roundNumber:0,
     roundActive:false,
     roundEnded:false,
+    gameOver:false,
     firstSolvedTeam:null,
     lanes:[]
   };
@@ -255,6 +272,7 @@ function normalizeState(raw){
     teamCount:clamp(parseInt(raw.teamCount, 10) || base.teamCount, 1, MAX_TEAMS),
     selectedTeam:clamp(parseInt(raw.selectedTeam, 10) || 0, 0, MAX_TEAMS - 1),
     defaultSeconds:clamp(parseInt(raw.defaultSeconds, 10) || base.defaultSeconds, 10, 600),
+    roundLimit:clamp(parseInt(raw.roundLimit, 10) || base.roundLimit, MIN_ROUND_LIMIT, MAX_ROUND_LIMIT),
     remainingSeconds:clamp(parseInt(raw.remainingSeconds, 10) || parseInt(raw.defaultSeconds, 10) || base.remainingSeconds, 0, 600),
     difficultyMode:DIFFICULTY_MODES.includes(raw.difficultyMode) ? raw.difficultyMode : base.difficultyMode,
     progressiveSettingsDirty:Boolean(raw.progressiveSettingsDirty),
@@ -272,6 +290,7 @@ function normalizeState(raw){
     roundNumber:Math.max(0, parseInt(raw.roundNumber, 10) || 0),
     roundActive:Boolean(raw.roundActive),
     roundEnded:Boolean(raw.roundEnded),
+    gameOver:Boolean(raw.gameOver),
     firstSolvedTeam:Number.isInteger(raw.firstSolvedTeam) ? raw.firstSolvedTeam : null,
     lanes:Array.isArray(raw.lanes) ? raw.lanes : []
   };
@@ -288,6 +307,7 @@ function loadState(){
 let state = loadState();
 state.gameStarted = false;
 state.roundActive = false;
+state.gameOver = false;
 
 function saveState(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -429,6 +449,33 @@ function playNextRoundSound(){
   }
 }
 
+function playVictorySound(){
+  if(!state.soundEffects) return;
+  const audio = getFileSound("victory");
+  if(!audio){
+    playGeneratedSuccess(true);
+    return;
+  }
+
+  let settled = false;
+  const playFallback = () => {
+    if(settled) return;
+    settled = true;
+    playGeneratedSuccess(true);
+  };
+
+  audio.pause();
+  audio.currentTime = 0;
+  audio.volume = effectsGain(1);
+  audio.onerror = playFallback;
+  const result = audio.play();
+  if(result && typeof result.then === "function"){
+    result.then(() => {
+      settled = true;
+    }).catch(playFallback);
+  }
+}
+
 function playRoundStartSound(){
   if(!soundAllowed("round")) return;
   tone({ frequency:520, duration:0.10, type:"sine", gain:0.13 });
@@ -439,6 +486,34 @@ function playRoundEndSound(){
   if(!soundAllowed("timer")) return;
   tone({ frequency:620, duration:0.11, type:"triangle", gain:0.13 });
   tone({ frequency:440, duration:0.16, type:"triangle", gain:0.12, delay:0.10 });
+}
+
+function winningTeamIndexes(){
+  const eligible = activeTeamIndexes();
+  const topScore = Math.max(...eligible.map((teamIndex) => teamAt(teamIndex).score));
+  return eligible.filter((teamIndex) => teamAt(teamIndex).score === topScore);
+}
+
+function announceVictory(){
+  if(state.gameOver || !state.gameStarted) return;
+  stopTimer();
+  state.roundActive = false;
+  state.roundEnded = true;
+  state.gameOver = true;
+  victoryDismissed = false;
+  saveState();
+  playVictorySound();
+  render();
+  setStatus("Victory!");
+}
+
+function finishGameIfRoundLimitReached(){
+  if(state.gameOver || !state.gameStarted) return false;
+  if(state.roundEnded && state.roundNumber >= state.roundLimit){
+    announceVictory();
+    return true;
+  }
+  return false;
 }
 
 function playTimerBeep(remainingSeconds){
@@ -534,6 +609,7 @@ function stopTimer(){
 }
 
 function endRound(reason = "Round ended"){
+  if(state.gameOver) return;
   const wasAlreadyEnded = state.roundEnded && !state.roundActive;
   stopTimer();
   state.roundActive = false;
@@ -545,7 +621,7 @@ function endRound(reason = "Round ended"){
   }
   saveState();
   setStatus(reason);
-  renderRoundControls();
+  if(!finishGameIfRoundLimitReached()) renderRoundControls();
 }
 
 function startTimer(){
@@ -650,6 +726,8 @@ function prepareRound({ forceNew = false, incrementRound = false } = {}){
 function startGame(){
   audioUnlocked = true;
   state.gameStarted = true;
+  state.gameOver = false;
+  victoryDismissed = false;
   stopTimer();
   timerBeepsPlayed.clear();
   resetProgressiveLevels();
@@ -672,6 +750,7 @@ function goToInstructions(){
 
 function startRound(){
   if(!state.gameStarted) startGame();
+  if(state.gameOver) return;
   state.roundActive = true;
   state.roundEnded = false;
   lastRoundEndSoundKey = "";
@@ -684,6 +763,8 @@ function startRound(){
 }
 
 function nextRound(){
+  if(finishGameIfRoundLimitReached()) return;
+  if(state.gameOver) return;
   stopTimer();
   timerBeepsPlayed.clear();
   lastRoundEndSoundKey = "";
@@ -695,6 +776,7 @@ function nextRound(){
 }
 
 function resetRound(){
+  if(state.gameOver) return;
   stopTimer();
   timerBeepsPlayed.clear();
   lastRoundEndSoundKey = "";
@@ -730,9 +812,11 @@ function awardTeam(teamIndex, points, statusText){
   saveState();
   setStatus(statusText || `${points >= 0 ? "Added" : "Subtracted"} ${Math.abs(points)} for ${state.teams[safeIndex].name}`);
   renderScores();
+  renderVictory();
 }
 
 function markCorrect(laneIndex){
+  if(state.gameOver) return;
   const lane = state.lanes[laneIndex];
   if(!lane || lane.solved || lane.incorrect) return;
 
@@ -758,9 +842,11 @@ function markCorrect(laneIndex){
   else playFileSound("firstSolve", () => playGeneratedSuccess(false));
   setStatus(`${state.teams[lane.teamIndex].name} solved for ${points} points`);
   render();
+  finishGameIfRoundLimitReached();
 }
 
 function markIncorrect(laneIndex){
+  if(state.gameOver) return;
   const lane = state.lanes[laneIndex];
   if(!lane || lane.solved || lane.incorrect || state.incorrectMode === "off") return;
 
@@ -808,6 +894,7 @@ function resetGame(){
   stopTimer();
   timerBeepsPlayed.clear();
   lastRoundEndSoundKey = "";
+  victoryDismissed = false;
   state.teams.forEach((team) => {
     team.score = 0;
   });
@@ -816,6 +903,7 @@ function resetGame(){
   state.roundNumber = 0;
   state.roundActive = false;
   state.roundEnded = false;
+  state.gameOver = false;
   state.firstSolvedTeam = null;
   state.lanes = [];
   resetProgressiveLevels();
@@ -828,6 +916,7 @@ function resetGame(){
 function renderSettings(){
   els.teamCount.value = String(state.teamCount);
   els.defaultTime.value = String(state.defaultSeconds);
+  els.roundLimit.value = String(state.roundLimit);
   els.difficultyMode.value = state.difficultyMode;
   els.showDifficultyLabels.value = state.showDifficultyLabels ? "on" : "off";
   els.incorrectMode.value = state.incorrectMode;
@@ -992,12 +1081,68 @@ function renderScores(){
 }
 
 function renderRoundControls(){
-  els.startRoundBtn.disabled = !state.gameStarted || state.roundActive;
-  els.endRoundBtn.disabled = !state.gameStarted || !state.roundActive;
-  els.nextRoundBtn.disabled = !state.gameStarted;
+  els.startRoundBtn.disabled = !state.gameStarted || state.roundActive || state.gameOver;
+  els.endRoundBtn.disabled = !state.gameStarted || !state.roundActive || state.gameOver;
+  els.nextRoundBtn.disabled = !state.gameStarted || state.gameOver;
   els.revealAllBtn.disabled = !state.gameStarted;
-  els.resetRoundBtn.disabled = !state.gameStarted;
-  els.timerStartPauseBtn.disabled = !state.gameStarted;
+  els.resetRoundBtn.disabled = !state.gameStarted || state.gameOver;
+  els.timerStartPauseBtn.disabled = !state.gameStarted || state.gameOver;
+}
+
+function renderVictory(){
+  if(!els.victoryOverlay) return;
+  const shouldShow = state.gameOver && !victoryDismissed;
+  els.victoryOverlay.hidden = !shouldShow;
+  if(!shouldShow) return;
+
+  const winners = winningTeamIndexes();
+  const winnerNames = winners.map((teamIndex) => teamAt(teamIndex).name);
+  const winnerScore = winners.length ? teamAt(winners[0]).score : 0;
+  const tied = winners.length > 1;
+
+  els.victoryKicker.textContent = `After ${state.roundLimit} ${state.roundLimit === 1 ? "round" : "rounds"}`;
+  els.victoryTitle.textContent = tied ? "Tie Victory!" : `${winnerNames[0]} Won!`;
+  els.victoryMessage.textContent = tied ? "They won in victory!" : `${winnerNames[0]} won in victory!`;
+  els.victoryWinnerList.innerHTML = "";
+
+  winners.forEach((teamIndex) => {
+    const team = teamAt(teamIndex);
+    const winner = document.createElement("div");
+    winner.className = "victoryWinner";
+    winner.style.setProperty("--winner-color", team.color);
+
+    const swatch = document.createElement("span");
+    swatch.className = "victorySwatch";
+    swatch.setAttribute("aria-hidden", "true");
+
+    const name = document.createElement("span");
+    name.textContent = team.name;
+
+    const color = document.createElement("span");
+    color.className = "victoryColorText";
+    color.textContent = team.color.toUpperCase();
+
+    winner.append(swatch, name, color);
+    els.victoryWinnerList.appendChild(winner);
+  });
+
+  els.victoryScores.innerHTML = "";
+  activeTeamIndexes()
+    .slice()
+    .sort((a, b) => teamAt(b).score - teamAt(a).score)
+    .forEach((teamIndex) => {
+      const team = teamAt(teamIndex);
+      const score = document.createElement("div");
+      score.className = "victoryScore";
+      score.style.setProperty("--winner-color", team.color);
+      if(team.score === winnerScore) score.classList.add("is-winner");
+      const name = document.createElement("span");
+      name.textContent = team.name;
+      const points = document.createElement("strong");
+      points.textContent = team.score;
+      score.append(name, points);
+      els.victoryScores.appendChild(score);
+    });
 }
 
 function renderLanes(){
@@ -1010,7 +1155,7 @@ function renderLanes(){
   }
 
   prepareRound();
-  els.laneIndicator.textContent = `Round ${state.roundNumber || 1} · ${state.teamCount} ${state.teamCount === 1 ? "Team" : "Teams"}`;
+  els.laneIndicator.textContent = `Round ${state.roundNumber || 1}/${state.roundLimit} · ${state.teamCount} ${state.teamCount === 1 ? "Team" : "Teams"}`;
 
   state.lanes.forEach((lane, laneIndex) => {
     const team = teamAt(lane.teamIndex);
@@ -1106,6 +1251,7 @@ function render(){
   renderScores();
   renderLanes();
   renderRoundControls();
+  renderVictory();
   updateTimerUi();
 }
 
@@ -1209,6 +1355,13 @@ els.defaultTime.addEventListener("change", () => {
   resetTimer();
 });
 
+els.roundLimit.addEventListener("change", () => {
+  state.roundLimit = clamp(parseInt(els.roundLimit.value, 10) || DEFAULT_ROUND_LIMIT, MIN_ROUND_LIMIT, MAX_ROUND_LIMIT);
+  saveState();
+  renderSettings();
+  finishGameIfRoundLimitReached();
+});
+
 els.difficultyMode.addEventListener("change", () => {
   state.difficultyMode = els.difficultyMode.value;
   if(state.difficultyMode === "progressive" && !state.gameStarted) resetProgressiveLevels();
@@ -1291,6 +1444,7 @@ els.settingsFullscreenBtn.addEventListener("click", toggleFullscreen);
 document.addEventListener("fullscreenchange", updateFullscreenButtons);
 
 els.timerStartPauseBtn.addEventListener("click", () => {
+  if(state.gameOver) return;
   if(timerId) stopTimer();
   else {
     state.roundActive = true;
@@ -1303,6 +1457,11 @@ els.timerResetBtn.addEventListener("click", resetTimer);
 els.timerMinusBtn.addEventListener("click", () => adjustTimer(-10));
 els.timerPlusBtn.addEventListener("click", () => adjustTimer(10));
 els.randomTeamBtn.addEventListener("click", runRandomTeamPicker);
+els.victoryNewGameBtn.addEventListener("click", resetGame);
+els.victoryCloseBtn.addEventListener("click", () => {
+  victoryDismissed = true;
+  renderVictory();
+});
 
 els.scoreToggleBtn.addEventListener("click", (event) => {
   event.stopPropagation();
@@ -1316,6 +1475,11 @@ els.scoreHeaderBar.addEventListener("click", () => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if(event.key === "Escape" && state.gameOver){
+    victoryDismissed = true;
+    renderVictory();
+    return;
+  }
   if(event.key === "Escape") closeSettings();
 });
 
